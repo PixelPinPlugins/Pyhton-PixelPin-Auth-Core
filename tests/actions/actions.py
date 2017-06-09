@@ -8,7 +8,7 @@ from six.moves.urllib_parse import urlparse
 
 from ...utils import parse_qs, module_member
 from ...actions import do_auth, do_complete
-from ..models import TestStorage, User, TestUserSocialAuth, TestNonce, \
+from ..models import TestStorage, User, TestUserPixelpinAuth, TestNonce, \
                      TestAssociation
 from ..strategy import TestStrategy
 
@@ -61,10 +61,10 @@ class BaseActionTest(unittest.TestCase):
     def setUp(self):
         HTTPretty.enable()
         User.reset_cache()
-        TestUserSocialAuth.reset_cache()
+        TestUserPixelpinAuth.reset_cache()
         TestNonce.reset_cache()
         TestAssociation.reset_cache()
-        Backend = module_member('social_core.backends.github.GithubOAuth2')
+        Backend = module_member('pixelpin_auth_core.backends.github.GithubOAuth2')
         self.strategy = self.strategy or TestStrategy(TestStorage)
         self.backend = Backend(self.strategy, redirect_uri='/complete/github')
         self.user = None
@@ -75,7 +75,7 @@ class BaseActionTest(unittest.TestCase):
         self.user = None
         User.reset_cache()
         User.set_active(True)
-        TestUserSocialAuth.reset_cache()
+        TestUserPixelpinAuth.reset_cache()
         TestNonce.reset_cache()
         TestAssociation.reset_cache()
         HTTPretty.disable()
@@ -83,11 +83,11 @@ class BaseActionTest(unittest.TestCase):
     def do_login(self, after_complete_checks=True, user_data_body=None,
                  expected_username=None):
         self.strategy.set_settings({
-            'SOCIAL_AUTH_GITHUB_KEY': 'a-key',
-            'SOCIAL_AUTH_GITHUB_SECRET': 'a-secret-key',
-            'SOCIAL_AUTH_LOGIN_REDIRECT_URL': self.login_redirect_url,
-            'SOCIAL_AUTH_AUTHENTICATION_BACKENDS': (
-                'social_core.backends.github.GithubOAuth2',
+            'pixelpin_auth_GITHUB_KEY': 'a-key',
+            'pixelpin_auth_GITHUB_SECRET': 'a-secret-key',
+            'pixelpin_auth_LOGIN_REDIRECT_URL': self.login_redirect_url,
+            'pixelpin_auth_AUTHENTICATION_BACKENDS': (
+                'pixelpin_auth_core.backends.github.GithubOAuth2',
             )
         })
         start_url = do_auth(self.backend).url
@@ -122,7 +122,7 @@ class BaseActionTest(unittest.TestCase):
                                    content_type='text/json')
         self.strategy.set_request_data(location_query, self.backend)
 
-        def _login(backend, user, social_user):
+        def _login(backend, user, pixelpin_auth_user):
             backend.strategy.session_set('username', user.username)
 
         redirect = do_complete(self.backend, user=self.user, login=_login)
@@ -135,24 +135,24 @@ class BaseActionTest(unittest.TestCase):
 
     def do_login_with_partial_pipeline(self, before_complete=None):
         self.strategy.set_settings({
-            'SOCIAL_AUTH_GITHUB_KEY': 'a-key',
-            'SOCIAL_AUTH_GITHUB_SECRET': 'a-secret-key',
-            'SOCIAL_AUTH_LOGIN_REDIRECT_URL': self.login_redirect_url,
-            'SOCIAL_AUTH_AUTHENTICATION_BACKENDS': (
-                'social_core.backends.github.GithubOAuth2',
+            'pixelpin_auth_GITHUB_KEY': 'a-key',
+            'pixelpin_auth_GITHUB_SECRET': 'a-secret-key',
+            'pixelpin_auth_LOGIN_REDIRECT_URL': self.login_redirect_url,
+            'pixelpin_auth_AUTHENTICATION_BACKENDS': (
+                'pixelpin_auth_core.backends.github.GithubOAuth2',
             ),
-            'SOCIAL_AUTH_PIPELINE': (
-                'social_core.pipeline.social_auth.social_details',
-                'social_core.pipeline.social_auth.social_uid',
-                'social_core.pipeline.social_auth.auth_allowed',
-                'social_core.tests.pipeline.ask_for_password',
-                'social_core.pipeline.social_auth.social_user',
-                'social_core.pipeline.user.get_username',
-                'social_core.pipeline.user.create_user',
-                'social_core.pipeline.social_auth.associate_user',
-                'social_core.pipeline.social_auth.load_extra_data',
-                'social_core.tests.pipeline.set_password',
-                'social_core.pipeline.user.user_details'
+            'pixelpin_auth_PIPELINE': (
+                'pixelpin_auth_core.pipeline.pixelpin_auth.pixelpin_auth_details',
+                'pixelpin_auth_core.pipeline.pixelpin_auth.pixelpin_auth_uid',
+                'pixelpin_auth_core.pipeline.pixelpin_auth.auth_allowed',
+                'pixelpin_auth_core.tests.pipeline.ask_for_password',
+                'pixelpin_auth_core.pipeline.pixelpin_auth.pixelpin_auth_user',
+                'pixelpin_auth_core.pipeline.user.get_username',
+                'pixelpin_auth_core.pipeline.user.create_user',
+                'pixelpin_auth_core.pipeline.pixelpin_auth.associate_user',
+                'pixelpin_auth_core.pipeline.pixelpin_auth.load_extra_data',
+                'pixelpin_auth_core.tests.pipeline.set_password',
+                'pixelpin_auth_core.pipeline.user.user_details'
             )
         })
         start_url = do_auth(self.backend).url
@@ -186,7 +186,7 @@ class BaseActionTest(unittest.TestCase):
                                    content_type='text/json')
         self.strategy.set_request_data(location_query, self.backend)
 
-        def _login(backend, user, social_user):
+        def _login(backend, user, pixelpin_auth_user):
             backend.strategy.session_set('username', user.username)
 
         redirect = do_complete(self.backend, user=self.user, login=_login)

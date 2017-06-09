@@ -8,7 +8,7 @@ import logging
 
 import six
 import requests
-import social_core
+import pixelpin_auth_core
 
 from six.moves.urllib_parse import urlparse, urlunparse, urlencode, \
                                    parse_qs as battery_parse_qs
@@ -20,9 +20,9 @@ from .exceptions import AuthCanceled, AuthUnreachableProvider
 
 
 
-SETTING_PREFIX = 'SOCIAL_AUTH'
+SETTING_PREFIX = 'pixelpin_auth'
 
-social_logger = logging.getLogger('social')
+Pixelpin_logger = logging.getLogger('pixelpin_auth')
 
 
 class SSLHttpAdapter(HTTPAdapter):
@@ -62,7 +62,7 @@ def module_member(name):
 
 def user_agent():
     """Builds a simple User-Agent string to send in requests"""
-    return 'social-auth-' + social_core.__version__
+    return 'pixelpin_auth-auth-' + pixelpin_auth_core.__version__
 
 
 def url_add_parameters(url, params):

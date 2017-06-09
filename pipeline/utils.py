@@ -14,7 +14,7 @@ def is_dict_type(value):
         value.__class__.__name__ in ('MergeDict', 'MultiDict')
 
 
-def partial_prepare(strategy, backend, next_step, user=None, social=None,
+def partial_prepare(strategy, backend, next_step, user=None, pixelpin_auth=None,
                     *args, **kwargs):
     kwargs.update({
         'response': kwargs.get('response') or {},
@@ -24,9 +24,9 @@ def partial_prepare(strategy, backend, next_step, user=None, social=None,
         'is_new': kwargs.get('is_new') or False,
         'new_association': kwargs.get('new_association') or False,
         'user': user and user.id or None,
-        'social': social and {
-            'provider': social.provider,
-            'uid': social.uid
+        'pixelpin_auth': pixelpin_auth and {
+            'provider': pixelpin_auth.provider,
+            'uid': pixelpin_auth.uid
         } or None
     })
 
@@ -45,10 +45,10 @@ def partial_prepare(strategy, backend, next_step, user=None, social=None,
     })
 
 
-def partial_store(strategy, backend, next_step, user=None, social=None,
+def partial_store(strategy, backend, next_step, user=None, pixelpin_auth=None,
                   *args, **kwargs):
     partial = partial_prepare(strategy, backend, next_step, user=user,
-                              social=social, *args, **kwargs)
+                              pixelpin_auth=pixelpin_auth, *args, **kwargs)
     return strategy.storage.partial.store(partial)
 
 
@@ -59,10 +59,10 @@ def partial_load(strategy, token):
         args = partial.args
         kwargs = partial.kwargs.copy()
         user = kwargs.get('user')
-        social = kwargs.get('social')
+        pixelpin_auth = kwargs.get('pixelpin_auth')
 
-        if isinstance(social, dict):
-            kwargs['social'] = strategy.storage.user.get_social_auth(**social)
+        if isinstance(pixelpin_auth, dict):
+            kwargs['pixelpin_auth'] = strategy.storage.user.get_pixelpin_auth(**pixelpin_auth)
 
         if user:
             kwargs['user'] = strategy.storage.user.get_user(user)

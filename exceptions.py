@@ -1,9 +1,9 @@
-class SocialAuthBaseException(ValueError):
+class PixelpinAuthBaseException(ValueError):
     """Base class for pipeline exceptions."""
     pass
 
 
-class WrongBackend(SocialAuthBaseException):
+class WrongBackend(PixelpinAuthBaseException):
     def __init__(self, backend_name):
         self.backend_name = backend_name
 
@@ -18,12 +18,12 @@ class MissingBackend(WrongBackend):
         return 'Missing backend "{0}" entry'.format(self.backend_name)
 
 
-class NotAllowedToDisconnect(SocialAuthBaseException):
-    """User is not allowed to disconnect it's social account."""
+class NotAllowedToDisconnect(PixelpinAuthBaseException):
+    """User is not allowed to disconnect it's pixelpin_auth account."""
     pass
 
 
-class AuthException(SocialAuthBaseException):
+class AuthException(PixelpinAuthBaseException):
     """Auth process exception."""
     def __init__(self, backend, *args, **kwargs):
         self.backend = backend
@@ -89,7 +89,7 @@ class AuthStateForbidden(AuthException):
 
 
 class AuthAlreadyAssociated(AuthException):
-    """A different user has already associated the target social account"""
+    """A different user has already associated the target pixelpin_auth account"""
     pass
 
 

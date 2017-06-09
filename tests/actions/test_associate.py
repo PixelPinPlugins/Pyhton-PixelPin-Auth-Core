@@ -16,13 +16,13 @@ class AssociateActionTest(BaseActionTest):
 
     def test_associate(self):
         self.do_login()
-        self.assertTrue(len(self.user.social), 1)
-        self.assertEqual(self.user.social[0].provider, 'github')
+        self.assertTrue(len(self.user.pixelpin_auth), 1)
+        self.assertEqual(self.user.pixelpin_auth[0].provider, 'github')
 
     def test_associate_with_partial_pipeline(self):
         self.do_login_with_partial_pipeline()
-        self.assertEqual(len(self.user.social), 1)
-        self.assertEqual(self.user.social[0].provider, 'github')
+        self.assertEqual(len(self.user.pixelpin_auth), 1)
+        self.assertEqual(self.user.pixelpin_auth[0].provider, 'github')
 
 
 class MultipleAccountsTest(AssociateActionTest):
@@ -59,12 +59,12 @@ class MultipleAccountsTest(AssociateActionTest):
         }
     })
 
-    def test_multiple_social_accounts(self):
+    def test_multiple_pixelpin_auth_accounts(self):
         self.do_login()
         self.do_login(user_data_body=self.alternative_user_data_body)
-        self.assertEqual(len(self.user.social), 2)
-        self.assertEqual(self.user.social[0].provider, 'github')
-        self.assertEqual(self.user.social[1].provider, 'github')
+        self.assertEqual(len(self.user.pixelpin_auth), 2)
+        self.assertEqual(self.user.pixelpin_auth[0].provider, 'github')
+        self.assertEqual(self.user.pixelpin_auth[1].provider, 'github')
 
 
 class AlreadyAssociatedErrorTest(BaseActionTest):

@@ -2,7 +2,7 @@ import json
 
 from ..exceptions import AuthException
 
-from .models import TestUserSocialAuth, TestStorage, User
+from .models import TestUserPixelpinAuth, TestStorage, User
 from .strategy import TestStrategy
 from .actions.actions import BaseActionTest
 
@@ -15,27 +15,27 @@ class UnknownError(Exception):
     pass
 
 
-class IntegrityErrorUserSocialAuth(TestUserSocialAuth):
+class IntegrityErrorUserPixelpinAuth(TestUserPixelpinAuth):
     @classmethod
-    def create_social_auth(cls, user, uid, provider):
+    def create_pixelpin_auth(cls, user, uid, provider):
         raise IntegrityError()
 
     @classmethod
-    def get_social_auth(cls, provider, uid):
+    def get_pixelpin_auth(cls, provider, uid):
         if not hasattr(cls, '_called_times'):
             cls._called_times = 0
         cls._called_times += 1
         if cls._called_times == 2:
             user = list(User.cache.values())[0]
-            return IntegrityErrorUserSocialAuth(user, provider, uid)
+            return IntegrityErrorUserPixelpinAuth(user, provider, uid)
         else:
-            return super(IntegrityErrorUserSocialAuth, cls).get_social_auth(
+            return super(IntegrityErrorUserPixelpinAuth, cls).get_pixelpin_auth(
                 provider, uid
             )
 
 
 class IntegrityErrorStorage(TestStorage):
-    user = IntegrityErrorUserSocialAuth
+    user = IntegrityErrorUserPixelpinAuth
 
     @classmethod
     def is_integrity_error(cls, exception):
@@ -43,14 +43,14 @@ class IntegrityErrorStorage(TestStorage):
         return isinstance(exception, IntegrityError)
 
 
-class UnknownErrorUserSocialAuth(TestUserSocialAuth):
+class UnknownErrorUserPixelpinAuth(TestUserPixelpinAuth):
     @classmethod
-    def create_social_auth(cls, user, uid, provider):
+    def create_pixelpin_auth(cls, user, uid, provider):
         raise UnknownError()
 
 
 class UnknownErrorStorage(IntegrityErrorStorage):
-    user = UnknownErrorUserSocialAuth
+    user = UnknownErrorUserPixelpinAuth
 
 
 class IntegrityErrorOnLoginTest(BaseActionTest):
@@ -77,7 +77,7 @@ class EmailAsUsernameTest(BaseActionTest):
 
     def test_email_as_username(self):
         self.strategy.set_settings({
-            'SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL': True
+            'pixelpin_auth_USERNAME_IS_FULL_EMAIL': True
         })
         self.do_login()
 
@@ -156,8 +156,8 @@ class SluggedUsernameTest(BaseActionTest):
 
     def test_random_username(self):
         self.strategy.set_settings({
-            'SOCIAL_AUTH_CLEAN_USERNAMES': False,
-            'SOCIAL_AUTH_SLUGIFY_USERNAMES': True
+            'pixelpin_auth_CLEAN_USERNAMES': False,
+            'pixelpin_auth_SLUGIFY_USERNAMES': True
         })
         self.do_login()
 
@@ -195,11 +195,11 @@ class UserPersistsInPartialPipeline(BaseActionTest):
         user.email = 'foo@bar.com'
 
         self.strategy.set_settings({
-            'SOCIAL_AUTH_PIPELINE': (
-                'social_core.pipeline.social_auth.social_details',
-                'social_core.pipeline.social_auth.social_uid',
-                'social_core.pipeline.social_auth.associate_by_email',
-                'social_core.tests.pipeline.set_user_from_kwargs'
+            'pixelpin_auth_PIPELINE': (
+                'pixelpin_auth_core.pipeline.pixelpin_auth.pixelpin_auth_details',
+                'pixelpin_auth_core.pipeline.pixelpin_auth.pixelpin_auth_uid',
+                'pixelpin_auth_core.pipeline.pixelpin_auth.associate_by_email',
+                'pixelpin_auth_core.tests.pipeline.set_user_from_kwargs'
             )
         })
 
@@ -216,11 +216,11 @@ class UserPersistsInPartialPipeline(BaseActionTest):
         user.email = 'foo@bar.com'
 
         self.strategy.set_settings({
-            'SOCIAL_AUTH_PIPELINE': (
-                'social_core.pipeline.social_auth.social_details',
-                'social_core.pipeline.social_auth.social_uid',
-                'social_core.pipeline.social_auth.associate_by_email',
-                'social_core.tests.pipeline.set_user_from_args'
+            'pixelpin_auth_PIPELINE': (
+                'pixelpin_auth_core.pipeline.pixelpin_auth.pixelpin_auth_details',
+                'pixelpin_auth_core.pipeline.pixelpin_auth.pixelpin_auth_uid',
+                'pixelpin_auth_core.pipeline.pixelpin_auth.associate_by_email',
+                'pixelpin_auth_core.tests.pipeline.set_user_from_args'
             )
         })
 

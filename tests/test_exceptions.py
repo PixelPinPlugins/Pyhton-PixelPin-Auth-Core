@@ -1,6 +1,6 @@
 import unittest2 as unittest
 
-from ..exceptions import SocialAuthBaseException, WrongBackend, \
+from ..exceptions import PixelpinAuthBaseException, WrongBackend, \
                          AuthFailed, AuthTokenError, \
                          AuthMissingParameter, AuthStateMissing, \
                          NotAllowedToDisconnect, AuthException, \
@@ -20,7 +20,7 @@ class BaseExceptionTestCase(unittest.TestCase):
             return
         try:
             raise self.exception
-        except SocialAuthBaseException as err:
+        except PixelpinAuthBaseException as err:
             self.assertEqual(str(err), self.expected_message)
 
 

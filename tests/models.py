@@ -30,7 +30,7 @@ class User(BaseModel):
         self.email = email
         self.password = None
         self.slug = None
-        self.social = []
+        self.pixelpin_auth = []
         self.extra_data = {}
         self.extra_user_fields = extra_user_fields
         self.save()
@@ -49,19 +49,19 @@ class User(BaseModel):
         User.cache[self.username] = self
 
 
-class TestUserSocialAuth(UserMixin, BaseModel):
+class TestUserPixelpinAuth(UserMixin, BaseModel):
     NEXT_ID = 1
     cache = {}
     cache_by_uid = {}
 
     def __init__(self, user, provider, uid, extra_data=None):
-        self.id = TestUserSocialAuth.next_id()
+        self.id = TestUserPixelpinAuth.next_id()
         self.user = user
         self.provider = provider
         self.uid = uid
         self.extra_data = extra_data or {}
-        self.user.social.append(self)
-        TestUserSocialAuth.cache_by_uid[uid] = self
+        self.user.pixelpin_auth.append(self)
+        TestUserPixelpinAuth.cache_by_uid[uid] = self
 
     def save(self):
         pass
@@ -89,12 +89,12 @@ class TestUserSocialAuth(UserMixin, BaseModel):
 
     @classmethod
     def allowed_to_disconnect(cls, user, backend_name, association_id=None):
-        return user.password or len(user.social) > 1
+        return user.password or len(user.pixelpin_auth) > 1
 
     @classmethod
     def disconnect(cls, entry):
         cls.cache.pop(entry.id, None)
-        entry.user.social = [s for s in entry.user.social if entry != s]
+        entry.user.pixelpin_auth = [s for s in entry.user.pixelpin_auth if entry != s]
 
     @classmethod
     def user_exists(cls, username):
@@ -111,19 +111,19 @@ class TestUserSocialAuth(UserMixin, BaseModel):
                 return user
 
     @classmethod
-    def get_social_auth(cls, provider, uid):
-        social_user = cls.cache_by_uid.get(uid)
-        if social_user and social_user.provider == provider:
-            return social_user
+    def get_pixelpin_auth(cls, provider, uid):
+        pixelpin_auth_user = cls.cache_by_uid.get(uid)
+        if pixelpin_auth_user and pixelpin_auth_user.provider == provider:
+            return pixelpin_auth_user
 
     @classmethod
-    def get_social_auth_for_user(cls, user, provider=None, id=None):
-        return [usa for usa in user.social
+    def get_pixelpin_auth_for_user(cls, user, provider=None, id=None):
+        return [usa for usa in user.pixelpin_auth
                 if provider in (None, usa.provider) and
                 id in (None, usa.id)]
 
     @classmethod
-    def create_social_auth(cls, user, uid, provider):
+    def create_pixelpin_auth(cls, user, uid, provider):
         return cls(user=user, provider=provider, uid=uid)
 
     @classmethod
@@ -219,7 +219,7 @@ class TestPartial(PartialMixin, BaseModel):
 
 
 class TestStorage(BaseStorage):
-    user = TestUserSocialAuth
+    user = TestUserPixelpinAuth
     nonce = TestNonce
     association = TestAssociation
     code = TestCode

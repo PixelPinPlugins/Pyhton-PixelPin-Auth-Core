@@ -14,7 +14,7 @@ def partial(func):
     with the token.
 
     The default value for this parameter is partial_token, but can be
-    overridden by SOCIAL_AUTH_PARTIAL_PIPELINE_TOKEN_NAME setting.
+    overridden by pixelpin_auth_PARTIAL_PIPELINE_TOKEN_NAME setting.
 
     The token is also stored in the session under the
     partial_pipeline_token key.

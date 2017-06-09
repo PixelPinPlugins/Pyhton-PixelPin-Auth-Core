@@ -109,16 +109,16 @@ class TestStrategy(BaseStrategy):
         return self.setting(
             'PIPELINE',
             (
-                'social_core.pipeline.social_auth.social_details',
-                'social_core.pipeline.social_auth.social_uid',
-                'social_core.pipeline.social_auth.auth_allowed',
-                'social_core.pipeline.social_auth.social_user',
-                'social_core.pipeline.user.get_username',
-                'social_core.pipeline.social_auth.associate_by_email',
-                'social_core.pipeline.user.create_user',
-                'social_core.pipeline.social_auth.associate_user',
-                'social_core.pipeline.social_auth.load_extra_data',
-                'social_core.pipeline.user.user_details'
+                'pixelpin_auth_core.pipeline.pixelpin_auth.pixelpin_auth_details',
+                'pixelpin_auth_core.pipeline.pixelpin_auth.pixelpin_auth_uid',
+                'pixelpin_auth_core.pipeline.pixelpin_auth.auth_allowed',
+                'pixelpin_auth_core.pipeline.pixelpin_auth.pixelpin_auth_user',
+                'pixelpin_auth_core.pipeline.user.get_username',
+                'pixelpin_auth_core.pipeline.pixelpin_auth.associate_by_email',
+                'pixelpin_auth_core.pipeline.user.create_user',
+                'pixelpin_auth_core.pipeline.pixelpin_auth.associate_user',
+                'pixelpin_auth_core.pipeline.pixelpin_auth.load_extra_data',
+                'pixelpin_auth_core.pipeline.user.user_details'
             ),
             backend
         )

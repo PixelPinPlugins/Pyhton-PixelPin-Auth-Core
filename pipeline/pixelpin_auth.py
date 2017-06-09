@@ -1,11 +1,11 @@
 from ..exceptions import AuthAlreadyAssociated, AuthException, AuthForbidden
 
 
-def social_details(backend, details, response, *args, **kwargs):
+def pixelpin_auth_details(backend, details, response, *args, **kwargs):
     return {'details': dict(backend.get_user_details(response), **details)}
 
 
-def social_uid(backend, details, response, *args, **kwargs):
+def pixelpin_auth_uid(backend, details, response, *args, **kwargs):
     return {'uid': backend.get_user_id(details, response)}
 
 
@@ -14,25 +14,25 @@ def auth_allowed(backend, details, response, *args, **kwargs):
         raise AuthForbidden(backend)
 
 
-def social_user(backend, uid, user=None, *args, **kwargs):
+def pixelpin_auth_user(backend, uid, user=None, *args, **kwargs):
     provider = backend.name
-    social = backend.strategy.storage.user.get_social_auth(provider, uid)
-    if social:
-        if user and social.user != user:
+    pixelpin_auth = backend.strategy.storage.user.get_pixelpin_auth(provider, uid)
+    if pixelpin_auth:
+        if user and pixelpin_auth.user != user:
             msg = 'This {0} account is already in use.'.format(provider)
             raise AuthAlreadyAssociated(backend, msg)
         elif not user:
-            user = social.user
-    return {'social': social,
+            user = pixelpin_auth.user
+    return {'pixelpin_auth': pixelpin_auth,
             'user': user,
             'is_new': user is None,
-            'new_association': social is None}
+            'new_association': pixelpin_auth is None}
 
 
-def associate_user(backend, uid, user=None, social=None, *args, **kwargs):
-    if user and not social:
+def associate_user(backend, uid, user=None, pixelpin_auth=None, *args, **kwargs):
+    if user and not pixelpin_auth:
         try:
-            social = backend.strategy.storage.user.create_social_auth(
+            pixelpin_auth = backend.strategy.storage.user.create_pixelpin_auth(
                 user, uid, backend.name
             )
         except Exception as err:
@@ -40,11 +40,11 @@ def associate_user(backend, uid, user=None, social=None, *args, **kwargs):
                 raise
             # Protect for possible race condition, those bastard with FTL
             # clicking capabilities, check issue #131:
-            #   https://github.com/omab/django-social-auth/issues/131
-            return social_user(backend, uid, user, *args, **kwargs)
+            #   https://github.com/omab/django-pixelpin_auth-auth/issues/131
+            return pixelpin_auth_user(backend, uid, user, *args, **kwargs)
         else:
-            return {'social': social,
-                    'user': social.user,
+            return {'pixelpin_auth': pixelpin_auth,
+                    'user': pixelpin_auth.user,
                     'new_association': True}
 
 
@@ -80,9 +80,9 @@ def associate_by_email(backend, details, user=None, *args, **kwargs):
 
 
 def load_extra_data(backend, details, response, uid, user, *args, **kwargs):
-    social = kwargs.get('social') or \
-             backend.strategy.storage.user.get_social_auth(backend.name, uid)
-    if social:
+    pixelpin_auth = kwargs.get('pixelpin_auth') or \
+             backend.strategy.storage.user.get_pixelpin_auth(backend.name, uid)
+    if pixelpin_auth:
         extra_data = backend.extra_data(user, uid, response, details,
                                         *args, **kwargs)
-        social.set_extra_data(extra_data)
+        pixelpin_auth.set_extra_data(extra_data)

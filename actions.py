@@ -60,12 +60,12 @@ def do_complete(backend, login, user=None, redirect_name='next',
                               'LOGIN_REDIRECT_URL')
     elif user:
         if user_is_active(user):
-            # catch is_new/social_user in case login() resets the instance
+            # catch is_new/pixelpin_auth_user in case login() resets the instance
             is_new = getattr(user, 'is_new', False)
-            social_user = user.social_user
-            login(backend, user, social_user)
+            pixelpin_auth_user = user.pixelpin_auth_user
+            login(backend, user, pixelpin_auth_user)
             # store last login backend name in session
-            backend.strategy.session_set('social_auth_last_login_backend', social_user.provider)
+            backend.strategy.session_set('pixelpin_auth_last_login_backend', pixelpin_auth_user.provider)
 
             if is_new:
                 url = setting_url(backend,
@@ -77,8 +77,8 @@ def do_complete(backend, login, user=None, redirect_name='next',
                                   'LOGIN_REDIRECT_URL')
         else:
             if backend.setting('INACTIVE_USER_LOGIN', False):
-                social_user = user.social_user
-                login(backend, user, social_user)
+                pixelpin_auth_user = user.pixelpin_auth_user
+                login(backend, user, pixelpin_auth_user)
             url = setting_url(backend, 'INACTIVE_USER_URL', 'LOGIN_ERROR_URL',
                               'LOGIN_URL')
     else:

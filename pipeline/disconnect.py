@@ -10,7 +10,7 @@ def allowed_to_disconnect(strategy, user, name, user_storage,
 def get_entries(strategy, user, name, user_storage, association_id=None,
                 *args, **kwargs):
     return {
-        'entries': user_storage.get_social_auth_for_user(
+        'entries': user_storage.get_pixelpin_auth_for_user(
             user, name, association_id
         )
     }

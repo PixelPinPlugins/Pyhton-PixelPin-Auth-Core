@@ -65,17 +65,17 @@ class BrokenUserTests(unittest.TestCase):
         with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
             self.user.get_user(1)
 
-    def test_get_social_auth(self):
+    def test_get_pixelpin_auth(self):
         with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
-            self.user.get_social_auth('foo', 1)
+            self.user.get_pixelpin_auth('foo', 1)
 
-    def test_get_social_auth_for_user(self):
+    def test_get_pixelpin_auth_for_user(self):
         with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
-            self.user.get_social_auth_for_user(User('foobar'))
+            self.user.get_pixelpin_auth_for_user(User('foobar'))
 
-    def test_create_social_auth(self):
+    def test_create_pixelpin_auth(self):
         with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):
-            self.user.create_social_auth(User('foobar'), 1, 'foo')
+            self.user.create_pixelpin_auth(User('foobar'), 1, 'foo')
 
     def test_disconnect(self):
         with self.assertRaisesRegexp(NotImplementedError, NOT_IMPLEMENTED_MSG):

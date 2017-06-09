@@ -1,4 +1,4 @@
-"""Models mixins for Social Auth"""
+"""Models mixins for pixelpin_auth Auth"""
 import re
 import time
 import base64
@@ -133,13 +133,13 @@ class UserMixin(object):
 
     @classmethod
     def allowed_to_disconnect(cls, user, backend_name, association_id=None):
-        """Return if it's safe to disconnect the social account for the
+        """Return if it's safe to disconnect the pixelpin_auth account for the
         given user"""
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
     def disconnect(cls, entry):
-        """Disconnect the social account for the given user"""
+        """Disconnect the pixelpin_auth account for the given user"""
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
@@ -166,18 +166,18 @@ class UserMixin(object):
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def get_social_auth(cls, provider, uid):
-        """Return UserSocialAuth for given provider and uid"""
+    def get_pixelpin_auth(cls, provider, uid):
+        """Return UserPixelpinAuth for given provider and uid"""
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def get_social_auth_for_user(cls, user, provider=None, id=None):
-        """Return all the UserSocialAuth instances for given user"""
+    def get_pixelpin_auth_for_user(cls, user, provider=None, id=None):
+        """Return all the UserPixelpinAuth instances for given user"""
         raise NotImplementedError('Implement in subclass')
 
     @classmethod
-    def create_social_auth(cls, user, uid, provider):
-        """Create a UserSocialAuth instance for given user"""
+    def create_pixelpin_auth(cls, user, uid, provider):
+        """Create a UserPixelpinAuth instance for given user"""
         raise NotImplementedError('Implement in subclass')
 
 
