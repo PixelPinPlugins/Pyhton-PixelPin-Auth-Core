@@ -50,7 +50,7 @@ class PixelPinOpenIDConnect(OpenIdConnectAuth):
 
         return {'username': username,
                 'email': response.get('email'),
-                'fullname': response.get('given_name') + response.get('family_name'),
+                'fullname': response.get('given_name') + ' ' + response.get('family_name'),
                 'first_name': response.get('given_name'),
                 'last_name': response.get('family_name'),
                 'gender': response.get('gender'),
