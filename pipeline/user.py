@@ -89,7 +89,7 @@ def user_details(strategy, details, user=None, *args, **kwargs):
         # on fields defined in pixelpin_auth_PROTECTED_FIELDS.
         for name, value in details.items():
             if value is not None and hasattr(user, name):
-                # Check https://github.com/omab/python-pixelpin_auth-auth/issues/671
+                # Check https://github.com/omab/python-social-auth/issues/671
                 current_value = getattr(user, name, None)
                 if not current_value or name not in protected:
                     changed |= current_value != value
